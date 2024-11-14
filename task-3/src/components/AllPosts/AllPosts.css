@@ -1,0 +1,6 @@
+.card-all {
+    display: grid;
+    justify-content: space-around;
+    flex-direction: column;
+    grid-template-columns: 400px 400px 400px;
+}

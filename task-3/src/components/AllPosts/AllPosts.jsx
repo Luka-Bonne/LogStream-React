@@ -1,20 +1,24 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { Card } from "../Card/Card";
+import './AllPosts.css'
 
 
 export const AllPosts = (props) => {
     const [users, setUsers] = useState([]);
     const [posts, setPosts] = useState([]);
 
-    let usersId;
-    let usersPosts = [];
+    const [usersId, setUsersId] = useState([]);
+    const [usersPosts, setUsersPosts] = useState([]);
+
+    const [loading, setLoading] = useState(true);
     
 
-    const getUserData = () => {
-        axios.get('https://jsonplaceholder.typicode.com/users')
+    const getUserData = async () => {
+        await axios.get('https://jsonplaceholder.typicode.com/users')
                 .then(function (response) {
                     setUsers(response.data);
+                    setLoading(false);
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -22,10 +26,11 @@ export const AllPosts = (props) => {
     }
 
 
-    const getPostsData = () => {
-        axios.get('https://jsonplaceholder.typicode.com/posts')
+    const getPostsData =  async () => {
+        await axios.get('https://jsonplaceholder.typicode.com/posts')
                 .then(function (response) {
                     setPosts(response.data);
+                    setLoading(false);
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -37,26 +42,39 @@ export const AllPosts = (props) => {
         getUserData();
         getPostsData();
 
-        usersId = users?.map(user => user.id)
-
+        setUsersId(users?.map(user => user.id));
+        
+        let list = []
         for (const i in usersId) {
             let userPosts = posts?.filter(post => post.userId === usersId[i]);
             let userName = users?.filter(user => user.id === usersId[i]).map(user => user.name);
-            usersPosts.push((userName[0], userPosts));
+
+            for (const j in userPosts){
+                console.log(userPosts[j].title);
+                list.push([userName[0], userPosts[j].title, userPosts[j].body]);
+            }
+        }
+        setUsersPosts(list);
+
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 4000)
+      
+        return () => {
+            clearTimeout(timer)
         }
     }, []);
 
-
+    
+    if (loading){
+        return (<></>)
+    }
+    
     return (
-        <div className="card">
-            <div className="card-container">
-                {usersPosts.map((usrName, usrPosts) => {
-                    console.log(usrName);
-                    return usrPosts.map(post => (
-                        <Card authorName={usrName} title={post.title} body={post.body} />
-                    ))
-                })}
-            </div>
+        <div className="card-all">
+            {usersPosts.map(post => (
+                <Card authorName={post[0]} title={post[1]} body={post[2]} />
+            ))}
         </div>
     )
 }
