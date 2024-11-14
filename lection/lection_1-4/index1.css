@@ -1,0 +1,6 @@
+li {
+    margin: 30px;
+    padding: 20px;
+    border: 1px solid green;
+    border-right: 1px solid blue;
+}

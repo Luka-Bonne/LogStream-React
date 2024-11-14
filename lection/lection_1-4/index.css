@@ -1,0 +1,46 @@
+div p {color: blueviolet;}
+h1, h2, h4 {color: aquamarine;}
+div > span {
+    color: aqua;
+}
+
+.testin {
+    color: red;
+}
+
+#test {
+    color: blue;
+}
+
+a {
+    color: green;
+}
+
+a:hover {
+    color: red;
+}
+
+input {
+    border: 1px solid green;
+    outline: none;
+}
+
+input:focus {
+    border: 1px solid red;
+}
+
+p::first-line {
+    color: red;
+}
+
+ul {
+    list-style: none;
+}
+
+li::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    display: inline-block;
+}
